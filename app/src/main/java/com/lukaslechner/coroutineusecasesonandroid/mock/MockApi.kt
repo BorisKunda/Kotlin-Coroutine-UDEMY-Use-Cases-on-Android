@@ -8,6 +8,8 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 
 interface MockApi {
+    /**retrofit calls return to main thread by retrofit itself
+    no need to manually switch to Dispatchers.Main */
 
     @GET("recent-android-versions")
     suspend fun getRecentAndroidVersions(): List<AndroidVersion>

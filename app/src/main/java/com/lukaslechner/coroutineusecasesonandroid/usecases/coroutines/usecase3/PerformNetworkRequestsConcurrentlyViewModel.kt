@@ -3,6 +3,7 @@ package com.lukaslechner.coroutineusecasesonandroid.usecases.coroutines.usecase3
 import androidx.lifecycle.viewModelScope
 import com.lukaslechner.coroutineusecasesonandroid.base.BaseViewModel
 import com.lukaslechner.coroutineusecasesonandroid.mock.MockApi
+import com.lukaslechner.coroutineusecasesonandroid.mock.VersionFeatures
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.launch
@@ -13,7 +14,8 @@ class PerformNetworkRequestsConcurrentlyViewModel(
 
     fun performNetworkRequestsSequentially() {
         uiState.value = UiState.Loading
-        viewModelScope.launch {
+        viewModelScope.launch(block = {
+            /**viewModelScope's block executes on main thread by default*/
             try {
                 val oreoFeatures = mockApi.getAndroidVersionFeatures(27)
                 val pieFeatures = mockApi.getAndroidVersionFeatures(28)
@@ -25,12 +27,12 @@ class PerformNetworkRequestsConcurrentlyViewModel(
             } catch (exception: Exception) {
                 uiState.value = UiState.Error("Network Request failed")
             }
-        }
+        })
     }
 
     fun performNetworkRequestsConcurrently() {
         uiState.value = UiState.Loading
-
+        /**viewModelScope's block executes on main thread by default*/
         val oreoFeaturesDeferred = viewModelScope.async { mockApi.getAndroidVersionFeatures(27) }
         val pieFeaturesDeferred = viewModelScope.async { mockApi.getAndroidVersionFeatures(28) }
         val android10FeaturesDeferred =
