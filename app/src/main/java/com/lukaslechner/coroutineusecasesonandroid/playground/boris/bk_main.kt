@@ -1,14 +1,17 @@
 package com.lukaslechner.coroutineusecasesonandroid.playground.boris
 
-import kotlinx.coroutines.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
-fun main() = runBlocking {
+fun main() = runBlocking<Unit> {
 
-GlobalScope.launch {
-
-}
-
-
-
+    launch {
+        foo("HELLO BORIS")
+    }
 
 }
+
+private suspend fun foo(string: String) {
+    print(string)
+}
+
